@@ -1,0 +1,4 @@
+{
+  "status": "blocked",
+  "comment": "Vercel is connected to the repo - great! The deployment will trigger on push, but the build requires environment variables to be set in the Vercel dashboard.\n\n**Still needed in Vercel Settings > Environment Variables:**\n\n1. `DATABASE_URL` - PostgreSQL connection string (from Supabase/Neon)\n2. `JWT_SECRET` - Random 256-bit string for auth\n3. `NEXTAUTH_URL` - Your production URL (e.g., https://your-app.vercel.app)\n4. `NEXTAUTH_SECRET` - Random string for NextAuth\n\nOnce these are set, the next push to `master` will trigger a successful deployment on Vercel. Let me know when they are configured and I will verify the build."
+}
