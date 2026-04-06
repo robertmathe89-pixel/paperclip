@@ -32,6 +32,8 @@ export default function BoardPage({ params }: { params: Promise<{ boardId: strin
   const [loading, setLoading] = useState(true)
   const [newTaskTitle, setNewTaskTitle] = useState('')
   const [boardId, setBoardId] = useState<string>('')
+  const [summary, setSummary] = useState<string | null>(null)
+  const [summaryLoading, setSummaryLoading] = useState(false)
 
   useEffect(() => {
     params.then(p => setBoardId(p.boardId))
@@ -82,6 +84,16 @@ export default function BoardPage({ params }: { params: Promise<{ boardId: strin
     setTasks(tasks.filter(t => t.id !== taskId))
   }
 
+  async function generateSummary() {
+    setSummaryLoading(true)
+    const res = await fetch(`/api/boards/${boardId}/summary`, { method: 'POST' })
+    const data = await res.json()
+    if (res.ok) {
+      setSummary(data.summary)
+    }
+    setSummaryLoading(false)
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -104,21 +116,36 @@ export default function BoardPage({ params }: { params: Promise<{ boardId: strin
       </header>
 
       <main className="max-w-7xl mx-auto p-6">
-        <form onSubmit={createTask} className="mb-6 flex gap-3">
-          <input
-            type="text"
-            value={newTaskTitle}
-            onChange={(e) => setNewTaskTitle(e.target.value)}
-            placeholder="Add a new task..."
-            className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+        <div className="flex gap-3 mb-6">
+          <form onSubmit={createTask} className="flex-1 flex gap-3">
+            <input
+              type="text"
+              value={newTaskTitle}
+              onChange={(e) => setNewTaskTitle(e.target.value)}
+              placeholder="Add a new task..."
+              className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <button
+              type="submit"
+              className="px-6 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700"
+            >
+              Add Task
+            </button>
+          </form>
           <button
-            type="submit"
-            className="px-6 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700"
+            onClick={generateSummary}
+            disabled={summaryLoading}
+            className="px-6 py-2.5 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 disabled:opacity-50"
           >
-            Add Task
+            {summaryLoading ? 'Generating...' : 'AI Summary'}
           </button>
-        </form>
+        </div>
+
+        {summary && (
+          <div className="mb-6 bg-white rounded-xl border border-purple-200 p-6">
+            <pre className="whitespace-pre-wrap text-sm text-gray-700 font-sans">{summary}</pre>
+          </div>
+        )}
 
         <div className="grid grid-cols-3 gap-6">
           {columns.map(col => (
