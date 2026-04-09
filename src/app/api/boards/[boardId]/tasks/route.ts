@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { requireAuth } from '@/lib/auth-middleware'
 
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ boardId: string }> }
 ) {
+  const { response } = await requireAuth(req)
+  if (response) return response
+
   const { boardId } = await params
   const tasks = await prisma.task.findMany({
     where: { boardId },
@@ -18,6 +22,9 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ boardId: string }> }
 ) {
+  const { response } = await requireAuth(req)
+  if (response) return response
+
   const { boardId } = await params
   const { title, description, assigneeId, priority } = await req.json()
 
