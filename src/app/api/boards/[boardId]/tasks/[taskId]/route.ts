@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { requireAuth } from '@/lib/auth-middleware'
 
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ boardId: string; taskId: string }> }
 ) {
+  const { response } = await requireAuth(req)
+  if (response) return response
+
   const { taskId } = await params
   const data = await req.json()
 
@@ -26,6 +30,9 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ boardId: string; taskId: string }> }
 ) {
+  const { response } = await requireAuth(req)
+  if (response) return response
+
   const { taskId } = await params
   await prisma.task.delete({ where: { id: taskId } })
   return NextResponse.json({ success: true })

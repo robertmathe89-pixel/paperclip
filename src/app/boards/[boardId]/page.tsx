@@ -111,7 +111,15 @@ export default function BoardPage({ params }: { params: Promise<{ boardId: strin
             <span className="text-gray-300">/</span>
             <h1 className="text-xl font-semibold text-gray-900">Board</h1>
           </div>
-          <a href="/login" className="text-sm text-gray-500 hover:text-gray-700">Sign out</a>
+          <button
+            onClick={async () => {
+              await fetch('/api/auth/logout', { method: 'POST' })
+              window.location.href = '/login'
+            }}
+            className="text-sm text-gray-500 hover:text-gray-700"
+          >
+            Sign out
+          </button>
         </div>
       </header>
 

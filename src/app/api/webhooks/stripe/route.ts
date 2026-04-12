@@ -2,9 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { prisma } from '@/lib/prisma'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder', {
-  apiVersion: '2025-02-24.clover' as any,
-})
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder')
 
 export async function POST(req: NextRequest) {
   const body = await req.text()
