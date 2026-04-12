@@ -8,9 +8,9 @@ const globalForPrisma = globalThis as unknown as {
 
 function createPrismaClient() {
   const connectionString =
-    process.env.DATABASE_URL ?? process.env.POSTGRES_URL ?? process.env.DIRECT_URL
+    process.env.DIRECT_URL ?? process.env.DATABASE_URL ?? process.env.POSTGRES_URL
   if (!connectionString) {
-    throw new Error('No database connection string found. Set DATABASE_URL, POSTGRES_URL, or DIRECT_URL.')
+    throw new Error('No database connection string found. Set DIRECT_URL, DATABASE_URL, or POSTGRES_URL.')
   }
 
   const pool = new Pool({ connectionString })
