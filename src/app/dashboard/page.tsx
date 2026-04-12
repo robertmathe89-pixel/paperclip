@@ -76,7 +76,7 @@ export default function DashboardPage() {
     const res = await fetch('/api/boards', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: newBoardName, teamId: activeTeamId, createdById: user.id }),
+      body: JSON.stringify({ name: newBoardName, teamId: activeTeamId }),
     })
     const data = await res.json()
     if (res.ok) {
