@@ -7,8 +7,8 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    // Vercel-Supabase integration provides POSTGRES_URL_NON_POOLING (direct connection)
-    // which is required for migrations. Fall back to pooler or generic DATABASE_URL.
-    url: process.env["POSTGRES_URL_NON_POOLING"] ?? process.env["DATABASE_URL"] ?? process.env["POSTGRES_URL"],
+    // DIRECT_URL is the non-pooled connection required for migrations.
+    // DATABASE_URL is the transaction pooler used at runtime.
+    url: process.env["DIRECT_URL"] ?? process.env["DATABASE_URL"] ?? process.env["POSTGRES_URL_NON_POOLING"],
   },
 });
