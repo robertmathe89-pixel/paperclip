@@ -7,8 +7,10 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    // DIRECT_URL is the non-pooled connection required for migrations.
-    // DATABASE_URL is the transaction pooler used at runtime.
-    url: process.env["DIRECT_URL"] ?? process.env["DATABASE_URL"] ?? process.env["POSTGRES_URL_NON_POOLING"],
+    // Use DIRECT_URL (session pooler, port 5432) for migrations.
+    // Falls back to DATABASE_URL (transaction pooler, port 6543).
+    // Note: Supabase free plan blocks direct DB connections from external IPs;
+    // use the session pooler host (aws-0-*.pooler.supabase.com:5432) instead.
+    url: process.env["DIRECT_URL"] ?? process.env["DATABASE_URL"] ?? process.env["POSTGRES_URL"],
   },
 });
